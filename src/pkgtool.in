@@ -1,0 +1,44 @@
+#!/bin/bash
+
+_DEVTOOLS_LIBRARY_DIR=${_DEVTOOLS_LIBRARY_DIR:-@pkgdatadir@}
+# shellcheck source=src/lib/common.sh
+source "${_DEVTOOLS_LIBRARY_DIR}"/lib/common.sh
+
+usage() {
+	local -r COMMAND=${BASH_SOURCE[0]##*/}
+	cat <<- EOF
+		Usage: ${COMMAND} [COMMAND] [OPTIONS]
+
+		OPTIONS
+		    -v, --version  Print version
+		    -h, --help     Show this help text
+EOF
+}
+
+if (( $# < 1 )); then
+	usage
+	exit 1
+fi
+
+print_version() {
+	cat <<- EOF
+		pkgtool @pkgtoolver@
+EOF
+}
+
+# command checking
+while (( $# )); do
+	case $1 in
+		-h|--help)
+			usage
+			exit 0
+			;;
+		-v|--version)
+			print_version
+			exit 0
+			;;
+        *)
+			die "invalid command: %s" "$1"
+			;;
+    esac
+done
